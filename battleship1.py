@@ -6,7 +6,17 @@ for i in range(10):
     board1.append(["0"]*10)
 ship1=-1  
 ship2=-1
-
+def shipcheck_u(ship1,ship2,n):
+    for i in range(n):
+        print(board1[ship1-1-i][ship2-1-i])
+        if  board1[ship1-1-i][ship2-1-i] == "1":
+            return False
+        elif board1[ship1-1-i][ship2-1-i] == "0" and i == n-1:
+            return True
+        elif  board1[ship1-1-i][ship2-1-i] == "0":
+            continue
+            
+        
 def shipsize(ship1,ship2,n,a):
     for i in range(n):
         if a=="d":
@@ -21,8 +31,7 @@ def shipsize(ship1,ship2,n,a):
         elif a=="r":
             board1[ship1-1][ship2-1]="1"
             ship2+=1
-        for row in board1:
-            print(" ".join(row))
+        
 
 def inputship(n):
     a=""
@@ -32,8 +41,9 @@ def inputship(n):
     ship1=-1  
     ship2=-1
     if a=="u":
-        while ship1<n or ship1<0:
+        while ship1<n or ship1<0 and shipcheck==False:
             ship1=(int(input("Where should your ship be? Row ")))
+            shipcheck = shipcheck_u(ship1,ship2,n)
     elif a=="d":
         while ship1>10-n or ship1<0:
             ship1=(int(input("Where should your ship be? Row ")))
@@ -56,9 +66,5 @@ inputship(4)
 for i in range(2):
     inputship(3)
 inputship(2)
-
-
-
-
-
-
+for row in board1:
+    print(" ".join(row))
