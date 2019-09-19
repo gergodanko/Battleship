@@ -1,3 +1,40 @@
+start_game = input("""
+                                           |_
+                                       ---/ |
+                                       ___\_|__
+                                      /| o  o |
+                       ___           / |______|\          ___
+                  ====/___\  ,------,--|------|--.       /___\====
+    _________________,|- -|,/---------------------\.____,|- -|,______________
+    \                       \. . . . . . . . . . . ./                       /     , 
+ ,  \   o           o           o           o           o           o     /    ,   )',    ,     ,(
+=)'===\___________________________________________________________________/==="('=='""=='"(=='-'  ',
+
+                            Welcome To Battleship
+               <------------------------------------------------->
+                Rules:
+                The classic battleship game with two phases:
+                1. Placement phase: Place your ships on the board.
+                First decide the orientation of your ship, then input
+                the coordinates.
+                The ships can't overlap with eachother.
+                There are 5 ships in total:
+                1. Carrier: 5 grid
+                2. Battleship: 4 grid
+                3. Cruiser: 3 grid
+                4. Submarine: 3 grid
+                5. Destroyer: 2 grid
+                --------------------------------------
+                2. War phase: The second player will guess the row
+                and the column where the ship was placed, 
+                if it is a hit, then the player will gain 1 point. 
+                The second player got 30 cannonballs.
+                If you shoot all of them, then the game is over.
+               <-------------------------------------------------> 
+                           Press Enter to Continue
+""")
+
+
 board=[]
 for i in range(10):
     board.append(["0"]*10)
@@ -81,6 +118,7 @@ def shipsize(ship1,ship2,n,a):
 def inputship(n):
     a=""
     while a is not "u" and a is not "d" and a is not "l" and a is not "r":
+        print("The current ship size is:{0}".format(n))
         a=str(input('Which way would you like to deploy your ship?\n up="u" down="d" left="l" right="r" \n(or press "x" to quit): '))
         if a=="x":
             quit()
