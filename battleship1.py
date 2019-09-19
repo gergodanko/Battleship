@@ -73,6 +73,7 @@ def shipsize(ship1,ship2,n,a):
         elif a=="r":
             board1[ship1-1][ship2-1]="1"
             ship2+=1
+
     for row in board1:
         print(" ".join(row))
         
@@ -80,51 +81,57 @@ def shipsize(ship1,ship2,n,a):
 def inputship(n):
     a=""
     while a is not "u" and a is not "d" and a is not "l" and a is not "r":
-        a=str(input("Milyen irányba álljon a hajo? u,d,l,r"))
+        a=str(input('Which way would you like to deploy your ship?\n up="u" down="d" left="l" right="r" \n(or press "x" to quit): '))
+        if a=="x":
+            quit()
     
     shipcheck=0
     ship1=-1  
     ship2=-1
-    if a=="u":
-        while ship1<n or ship1<0 or shipcheck==0:
-            shipcheck=0
-            ship1=-1
-            ship1=(int(input("Where should your ship be? Row ")))
-            ship2=-1
-            while ship2>10 or ship2<0:
-                ship2=(int(input("Where should you ship be? Column ")))
-            shipcheck=shipcheck_u(ship1,ship2,n)
-
-    elif a=="d":
-        while ship1>11-n or ship1<0 or shipcheck==0:
-            shipcheck=0
-            ship1=-1
-            ship1=(int(input("Where should your ship be? Row ")))
-            ship2=-1
-            while ship2>10 or ship2<0:
-                ship2=(int(input("Where should you ship be? Column ")))
-            shipcheck=shipcheck_d(ship1,ship2,n)
-                
-    elif a=="l" :
-        while ship1>10 or ship1<0 or shipcheck==0:
-            shipcheck=0
-            ship1=-1
-            ship1=(int(input("Where should your ship be? Row ")))
-            ship2=-1
-            while ship2<n or ship2>10:
-                ship2=(int(input("Where should you ship be? Column ")))
-            shipcheck=shipcheck_l(ship1,ship2,n)
-
-    elif a=="r":
-        while ship1>10 or ship1<0 or shipcheck==0:
-            shipcheck=0
-            ship1=-1
-            ship1=(int(input("Where should your ship be? Row ")))
-            ship2=-1
-            while ship2>11-n or ship2<0:
-                ship2=(int(input("Where should you ship be? Column ")))
-            shipcheck=shipcheck_r(ship1,ship2,n)
-
+    while True:
+        try:
+            if a=="u":
+                while ship1<n or ship1<0 or shipcheck==0:
+                    shipcheck=0
+                    ship1=-1
+                    ship1=(int(input("Row coordinate: ")))
+                    ship2=-1
+                    while ship2>10 or ship2<0:
+                        ship2=(int(input("Column coordinate: ")))
+                    shipcheck=shipcheck_u(ship1,ship2,n)
+                break
+            elif a=="d":
+                while ship1>11-n or ship1<0 or shipcheck==0:
+                    shipcheck=0
+                    ship1=-1
+                    ship1=(int(input("Row coordinate: ")))
+                    ship2=-1
+                    while ship2>10 or ship2<0:
+                        ship2=(int(input("Column coordinate: ")))
+                    shipcheck=shipcheck_d(ship1,ship2,n)
+                break       
+            elif a=="l" :
+                while ship1>10 or ship1<0 or shipcheck==0:
+                    shipcheck=0
+                    ship1=-1
+                    ship1=(int(input("Row coordinate: ")))
+                    ship2=-1
+                    while ship2<n or ship2>10:
+                        ship2=(int(input("Column coordinate: ")))
+                    shipcheck=shipcheck_l(ship1,ship2,n)
+                break
+            elif a=="r":
+                while ship1>10 or ship1<0 or shipcheck==0:
+                    shipcheck=0
+                    ship1=-1
+                    ship1=(int(input("Row coordinate: ")))
+                    ship2=-1
+                    while ship2>11-n or ship2<0:
+                        ship2=(int(input("Column coordinate: ")))
+                    shipcheck=shipcheck_r(ship1,ship2,n)
+                break
+        except ValueError:
+            print("Wrong input! Try again!")
     shipsize(ship1,ship2,n,a)
     return board1
 inputship(5)
@@ -132,5 +139,56 @@ inputship(4)
 for i in range(2):
     inputship(3)
 inputship(2)
-for row in board1:
-    print(" ".join(row))
+for i in range(500):
+    print("\n")
+
+success = 0
+shot = 0
+
+for i in range(5):
+    
+    while True:
+        try:
+            guess_column = 0
+            guess_row = 0
+            while guess_row > 10 or guess_row <= 0 :
+                guess_row = input("Which row you wanna' shoot?: ")
+                if guess_row=="x":
+                    quit()
+                else:
+                    guess_row = int(guess_row)
+                print(guess_row)
+                
+            while guess_column > 10 or guess_column <= 0 :
+                guess_column = input("Which column you wanna' shoot?: ")
+                if guess_column=="x":
+                    quit()
+                else:
+                    guess_column=int(guess_column)
+
+            break
+        except (ValueError):
+            print("Wrong input!")
+    if (board1[guess_row-1][guess_column-1] == "1"):
+        shot +=1
+        success += 1
+        board1[guess_row-1][guess_column-1] = "x"
+        board[guess_row-1][guess_column-1]= "#"
+        for row in board:
+            print(" ".join(row))
+        print("Nice shot!")
+        if success==17:
+            for row in board:
+                print(" ".join(row))
+            print("Congratulations! You destroyed all of the ships! ")
+        else:
+            continue
+    else: 
+        shot +=1
+        board[guess_row-1][guess_column-1]= "x"
+        for row in board:
+            print(" ".join(row))
+        print("You missed it!")
+
+print("Game over!")
+print("Your score is:{0}".format(success))
