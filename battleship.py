@@ -59,15 +59,15 @@ while True:
 
     def shipcheck_d(ship1,ship2,n):
         for i in range(2,2+n):
-            if  board1[ship1+(i-2)][ship2-1] == "1":
+            if  board1[(ship1-1)+(i-2)][ship2-1] == "1":
                 print("You can't put your ship here!")
                 return 0
-            elif board1[ship1+(i-2)][ship2-1] == "1" and i == n:
+            elif board1[(ship1-1)+(i-2)][ship2-1] == "1" and i == n:
                 print("You can't put your ship here!")
                 return 0
-            elif board1[ship1+(i-2)][ship2-1] == "0" and i == n:
+            elif board1[(ship1-1)+(i-2)][ship2-1] == "0" and i == n:
                 return 1
-            elif  board1[ship1+(i-2)][ship2-1] == "0":
+            elif  board1[(ship1-1)+(i-2)][ship2-1] == "0":
                 continue
 
     def shipcheck_l(ship1,ship2,n):
@@ -85,15 +85,15 @@ while True:
                 
     def shipcheck_r(ship1,ship2,n):
         for i in range(2,2+n):
-            if  board1[ship1-1][ship2+(i-2)] == "1":
+            if  board1[ship1-1][(ship2-1)+(i-2)] == "1":
                 print("You can't put your ship here!")
                 return 0
-            elif board1[ship1-1][ship2+(i-2)] == "1" and i == n:
+            elif board1[ship1-1][(ship2-1)+(i-2)] == "1" and i == n:
                 print("You can't put your ship here!")
                 return 0
-            elif board1[ship1-1][ship2+(i-2)] == "0" and i == n:
+            elif board1[ship1-1][(ship2-1)+(i-2)] == "0" and i == n:
                 return 1
-            elif  board1[ship1-1][ship2+(i-2)] == "0":
+            elif  board1[ship1-1][(ship2-1)+(i-2)] == "0":
                 continue
             
     def shipsize(ship1,ship2,n,a):
@@ -179,7 +179,7 @@ while True:
     inputship(2)
     for i in range(500):
         print("\n")
-
+                        #BATTLE PHASE
     success = 0
     shot = 0
     n=5
