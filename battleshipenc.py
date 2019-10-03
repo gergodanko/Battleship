@@ -1,3 +1,5 @@
+import os
+from datetime import datetime
 start_game = input("""
                                            |_
                                        ---/ |
@@ -32,13 +34,40 @@ start_game = input("""
                <-------------------------------------------------> 
                            Press Enter to Continue
 """)
+def highscore_read():
+    with open ("Highscore.txt", "r") as file_handle:
+        lines=file_handle.readlines()
+        lines="\n".join(lines)
+        print(lines)
+def highscore_file():
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M")
+    with open ("Highscore.txt", "a+") as file_handle:
+        file_handle.write("\n{0}: \nPlayer      Shots     Score\n{3:<8}     {1:^3}      {2:>3} \n{4:<8}     {5:^3}      {6:>3}\n".format(dt_string,shot1,success1,player1,player2,shot2,success2))
+        file_handle.write("--------------------------")
+def player_name(player1,player2):
+    while True:
+        player1=input("player1 type in your name!(Max 8 characters): ")
+        if len(player1)>8:
+            continue
+        else:
+            break
+
+    while True:
+        player2=input("player2 type in your name!(Max 8 characters): ")
+        if len(player2)>8:
+            continue
+        else:
+            break
+    return player1,player2
+        
 
 def score_board():
     print("----------------------")
     print("|Player    |Shots|Hits|")
     print("|---------------------|")
-    print("|Player 1  | {0:^3} | {1:>3}| ".format( shot1, success1))
-    print("|Player 2  | {0:^3} | {1:>3}| ".format( shot2, success2))
+    print("|{2:<8}  | {0:^3} | {1:>3}| ".format( shot1, success1,player1))
+    print("|{2:<8}  | {0:^3} | {1:>3}| ".format( shot2, success2,player2))
     print("-----------------------")
 
 
@@ -119,14 +148,16 @@ def shipsize(board,ship1,ship2,n,a):
         elif a=="r":
             board[ship1-1][ship2-1]="1"
             ship2+=1
-
+    os.system("clear")
     print_board(board)
         
 
-def inputship(board,n):
+def inputship(player,board,n):
     a=""
-    print_board(board)
     while a is not "u" and a is not "d" and a is not "l" and a is not "r":
+        os.system("clear")
+        print("{0} is deploying the ships.\n".format(player))
+        print_board(board)
         print("The current ship size is:{0}".format(n))
         a=str(input('Which way would you like to deploy your ship?\n up="u" down="d" left="l" right="r" \n(or press "x" to quit): '))
         if a=="x":
@@ -223,11 +254,13 @@ def battle_phase(shootboard,board,success,shot):
                 continue
             else:
                 break
+                
 
 
             break
         except (ValueError):
             print("Wrong input!")
+    os.system("clear")
     if (board[guess_row-1][guess_column-1] == "1"):
         success=success+1
         shot=shot+1
@@ -235,42 +268,47 @@ def battle_phase(shootboard,board,success,shot):
         shootboard[guess_row-1][guess_column-1]= "#"
         print_board(shootboard)
         print("Nice shot!")
+        input("Press enter to advance!")
+        os.system("clear")
         
     else: 
         shot +=1
         shootboard[guess_row-1][guess_column-1]= "x"
         print_board(shootboard)
         print("You missed it!")
+        input("Press enter to advance!")
+        os.system("clear")
     
     return success, shot
 
 while True:
-   
+    os.system("clear")
     board1=[]
     for i in range(10):
         board1.append(["0"]*10)
     ship1=-1  
     ship2=-1
-    inputship(board1,5)
-    inputship(board1,4)
+    player1=""
+    player2=""
+    player1,player2=player_name(player1,player2)
+    inputship(player1,board1,5)
+    inputship(player1,board1,4)
     for i in range(2):
-        inputship(board1,3)
-    inputship(board1, 2)
+        inputship(player1,board1,3)
+    inputship(player1,board1, 2)
     cont = input("Press a button to advance.")
-    for i in range(500):
-        print("\n")
+    os.system("clear")
     #Second player prep phase
     board2=[]
     for i in range(10):
         board2.append(["0"]*10)
-    inputship(board2,5)
-    inputship(board2,4)
+    inputship(player2,board2,5)
+    inputship(player2,board2,4)
     for i in range(2):
-        inputship(board2,3)
-    inputship(board2, 2)
+        inputship(player2,board2,3)
+    inputship(player2,board2, 2)
     cont_battle = input("Press a button to advance.")
-    for i in range(500):
-        print("\n")
+    os.system("clear")
     #Battlephase 
     shootboard1=[]
     for i in range(10):
@@ -284,28 +322,36 @@ while True:
     shot2=0
     while  True: 
         print_board(shootboard1)
-        print("Player one is attacking:")
+        print("{0} is attacking:".format(player1))
         (success1, shot1) = battle_phase(shootboard1,board2,success1,shot1)
-        if success1==1:
+        if success1==17:
             break
         else:
             pass
         print_board(shootboard2)
-        print("Player two is attacking: ")
+        print("{0} is attacking: ".format(player2))
         (success2, shot2) = battle_phase(shootboard2,board1,success2,shot2)
-        if success2==1:
+        if success2==17:
             break
         else:
             pass
-    if success1==1:
-        print("Player 1 won the game.")
+    if success1==17:
+        print("{0} won the game.".format(player1))
+        highscore_file()
         score_board()
     elif success2==17:
-        print("Player 2 won the game.")
+        print("{0} won the game.".format(player2))
+        highscore_file()
         score_board()
+    hs = input("Do you want to see the match history? y/n")
+    if hs == "y" or hs == "Y":
+        highscore_read()
+    else:
+        continue
+    
     playagain=""
     while playagain!="y" or playagain!="Y" or playagain!="n" or playagain!="N":
-        playagain = input("Do you want to play again? y/n:")
+        playagain = input("Do you want to play again?  y/n:")
         if playagain == "y" or playagain == "Y":
             break
         elif playagain == "n" or playagain == "N" :
