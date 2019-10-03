@@ -33,7 +33,25 @@ start_game = input("""
                            Press Enter to Continue
 """)
 
+def score_board():
+    print("----------------------")
+    print("|Player    |Shots|Hits|")
+    print("|---------------------|")
+    print("|Player 1  | {0:^3} | {1:>3}| ".format( shot1, success1))
+    print("|Player 2  | {0:^3} | {1:>3}| ".format( shot2, success2))
+    print("-----------------------")
 
+
+def print_board(board):
+    print("     1   2   3   4   5   6   7   8   9   10")
+    print("   -----------------------------------------")
+    i=1
+    for row in board:
+        rw=" | ".join(row)
+        print(" {0:<2}|".format(i), end="")
+        print(" {0} |".format(rw.replace('0',' ')))
+        print("   -----------------------------------------")
+        i+=1
 
 def shipcheck_u(board,ship1,ship2,n):
     for i in range(1,n+1):
@@ -102,12 +120,12 @@ def shipsize(board,ship1,ship2,n,a):
             board[ship1-1][ship2-1]="1"
             ship2+=1
 
-    for row in board:
-        print(" ".join(row))
+    print_board(board)
         
 
 def inputship(board,n):
     a=""
+    print_board(board)
     while a is not "u" and a is not "d" and a is not "l" and a is not "r":
         print("The current ship size is:{0}".format(n))
         a=str(input('Which way would you like to deploy your ship?\n up="u" down="d" left="l" right="r" \n(or press "x" to quit): '))
@@ -133,18 +151,6 @@ def inputship(board,n):
                         elif shipcheck==1:
                             break
                 break     
-
-                '''
-                while ship1<n or ship1<0 or shipcheck==0:
-                    shipcheck=0
-                    ship1=-1
-                    ship1=(int(input("Row coordinate: ")))
-                    ship2=-1
-                    while ship2>10 or ship2<0:
-                        ship2=(int(input("Column coordinate: ")))
-                    shipcheck=shipcheck_u(board,ship1,ship2,n)
-                break
-                '''
             elif a=="d":
                 while shipcheck==0:
                     ship1=-1
@@ -153,8 +159,6 @@ def inputship(board,n):
                     ship2=(int(input("Column coordinate: ")))
                     shipcheck=0
                     if ship1+n<=11 and ship1>0 and ship2<=10 and ship2>0 :
-                        #while ship2>10 or ship2<0:
-                        print("asdasfa")
                         shipcheck=shipcheck_d(board,ship1,ship2,n)
                         if shipcheck==0:
                             continue
@@ -169,26 +173,12 @@ def inputship(board,n):
                     ship2=(int(input("Column coordinate: ")))
                     shipcheck=0
                     if ship1<=10 and ship1>0 and ship2>=n and ship2<=10 :
-                        #while ship2>10 or ship2<0:
-                        print("asdasfa")
                         shipcheck=shipcheck_l(board,ship1,ship2,n)
                         if shipcheck==0:
                             continue
                         elif shipcheck==1:
                             break
                 break     
-
-                '''
-                while ship1>10 or ship1<0 or shipcheck==0:
-                    shipcheck=0
-                    ship1=-1
-                    ship1=(int(input("Row coordinate: ")))
-                    ship2=-1
-                    while ship2<n or ship2>10:
-                        ship2=(int(input("Column coordinate: ")))
-                    shipcheck=shipcheck_l(board,ship1,ship2,n)
-                break
-                '''
             elif a=="r":
                 while shipcheck==0:
                     ship1=-1
@@ -197,93 +187,65 @@ def inputship(board,n):
                     ship2=(int(input("Column coordinate: ")))
                     shipcheck=0
                     if ship1>0 and ship1<=10 and ship2+n<=11 and ship2>0 :
-                        #while ship2>10 or ship2<0:
-                        print("asdasfa")
                         shipcheck=shipcheck_r(board,ship1,ship2,n)
                         if shipcheck==0:
                             continue
                         elif shipcheck==1:
                             break
                 break     
-                '''
-                while ship1>10 or ship1<0 or shipcheck==0:
-                    shipcheck=0
-                    ship1=-1
-                    ship1=(int(input("Row coordinate: ")))
-                    ship2=-1
-                    while ship2>10-n+1 or ship2<0:
-                        ship2=(int(input("Column coordinate: ")))
-                    shipcheck=shipcheck_r(board,ship1,ship2,n)
-                break
-                '''
         except ValueError:
             print("Wrong input! Try again!")
     shipsize(board,ship1,ship2,n,a)
     return board
     
                         #BATTLE PHASE
-def battle_phase(board,success, shot):
-    n=5
-    for i in range(n):  
-        while True:
-            try:
-                guess_column = 0
-                guess_row = 0
-                while guess_row > 10 or guess_row <= 0 :
-                    guess_row = input("Which row you wanna' shoot?('x'=quit): ")
-                    if guess_row=="x":
-                        quit()
-                    else:
-                        guess_row = int(guess_row)
-                        
-                while guess_column > 10 or guess_column <= 0 :
-                    guess_column = input("Which column you wanna' shoot?('x'=quit): ")
-                    if guess_column=="x":
-                        quit()
-                    else:
-                        guess_column=int(guess_column)
+def battle_phase(shootboard,board,success,shot):
 
-                break
-            except (ValueError):
-                print("Wrong input!")
-        if (board[guess_row-1][guess_column-1] == "1"):
-            shot +=1
-            success += 1
-            board[guess_row-1][guess_column-1] = "x"
-            shootboard[guess_row-1][guess_column-1]= "#"
-            for row in shootboard:
-                print(" ".join(row))
-            print("Nice shot!")
-            if success==17:
-                for row in shootboard:
-                    print(" ".join(row))
-                print("Congratulations! You destroyed all of the ships! ")
-                print("Your score is:{0}".format(success))
-                temp=input("Do you want to play again? y/n: ")
-                if temp=="y":
-                    break
-                elif temp=="n":
+    while True:
+        try:
+            guess_column = 0
+            guess_row = 0
+            while guess_row > 10 or guess_row <= 0 :
+                guess_row = input("Which row you wanna' shoot?('x'=quit): ")
+                if guess_row=="x":
                     quit()
+                else:
+                    guess_row = int(guess_row)
+                    
+            while guess_column > 10 or guess_column <= 0 :
+                guess_column = input("Which column you wanna' shoot?('x'=quit): ")
+                if guess_column=="x":
+                    quit()
+                else:
+                    guess_column=int(guess_column)
+            if shootboard[guess_row-1][guess_column-1]=="x" or shootboard[guess_row-1][guess_column-1]=="#":
+                print("You already shot there!")
+                continue
             else:
-                continue
-        else: 
-            shot +=1
-            shootboard[guess_row-1][guess_column-1]= "x"
-            for row in shootboard:
-                print(" ".join(row))
-            print("You missed it!")
-        if shot==n:
-            print("Game over!")
-            print("Your score is:{0}".format(success))
-            temp=input("Do you want to play again? y/n: ")
-            if temp=="y":
-                continue
-            elif temp=="n":
-                quit()
+                break
+
+
+            break
+        except (ValueError):
+            print("Wrong input!")
+    if (board[guess_row-1][guess_column-1] == "1"):
+        success=success+1
+        shot=shot+1
+        board[guess_row-1][guess_column-1] = "x"
+        shootboard[guess_row-1][guess_column-1]= "#"
+        print_board(shootboard)
+        print("Nice shot!")
+        
+    else: 
+        shot +=1
+        shootboard[guess_row-1][guess_column-1]= "x"
+        print_board(shootboard)
+        print("You missed it!")
+    
+    return success, shot
+
 while True:
-    shootboard=[]
-    for i in range(10):
-        shootboard.append(["0"]*10)
+   
     board1=[]
     for i in range(10):
         board1.append(["0"]*10)
@@ -294,8 +256,57 @@ while True:
     for i in range(2):
         inputship(board1,3)
     inputship(board1, 2)
+    cont = input("Press a button to advance.")
     for i in range(500):
         print("\n")
+    #Second player prep phase
+    board2=[]
+    for i in range(10):
+        board2.append(["0"]*10)
+    inputship(board2,5)
+    inputship(board2,4)
+    for i in range(2):
+        inputship(board2,3)
+    inputship(board2, 2)
+    cont_battle = input("Press a button to advance.")
+    for i in range(500):
+        print("\n")
+    #Battlephase 
+    shootboard1=[]
+    for i in range(10):
+        shootboard1.append(["0"]*10)
+    shootboard2=[]
+    for i in range(10):
+        shootboard2.append(["0"]*10)
     success1=0
     shot1=0
-    battle_phase(board1,success1,shot1)
+    success2=0
+    shot2=0
+    while  True: 
+        print_board(shootboard1)
+        print("Player one is attacking:")
+        (success1, shot1) = battle_phase(shootboard1,board2,success1,shot1)
+        if success1==1:
+            break
+        else:
+            pass
+        print_board(shootboard2)
+        print("Player two is attacking: ")
+        (success2, shot2) = battle_phase(shootboard2,board1,success2,shot2)
+        if success2==1:
+            break
+        else:
+            pass
+    if success1==1:
+        print("Player 1 won the game.")
+        score_board()
+    elif success2==17:
+        print("Player 2 won the game.")
+        score_board()
+    playagain=""
+    while playagain!="y" or playagain!="Y" or playagain!="n" or playagain!="N":
+        playagain = input("Do you want to play again? y/n:")
+        if playagain == "y" or playagain == "Y":
+            break
+        elif playagain == "n" or playagain == "N" :
+            quit()
