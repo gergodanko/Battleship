@@ -161,6 +161,7 @@ def inputship(player,board,n):
         print("The current ship size is:{0}".format(n))
         a=str(input('Which way would you like to deploy your ship?\n up="u" down="d" left="l" right="r" \n(or press "x" to quit): '))
         if a=="x":
+            os.system("clear")
             quit()
     
     shipcheck=0
@@ -239,6 +240,7 @@ def battle_phase(shootboard,board,success,shot):
             while guess_row > 10 or guess_row <= 0 :
                 guess_row = input("Which row you wanna' shoot?('x'=quit): ")
                 if guess_row=="x":
+                    os.system("clear")
                     quit()
                 else:
                     guess_row = int(guess_row)
@@ -246,6 +248,7 @@ def battle_phase(shootboard,board,success,shot):
             while guess_column > 10 or guess_column <= 0 :
                 guess_column = input("Which column you wanna' shoot?('x'=quit): ")
                 if guess_column=="x":
+                    os.system("clear")
                     quit()
                 else:
                     guess_column=int(guess_column)
@@ -355,4 +358,5 @@ while True:
         if playagain == "y" or playagain == "Y":
             break
         elif playagain == "n" or playagain == "N" :
+            os.system("clear")
             quit()
